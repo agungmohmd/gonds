@@ -48,7 +48,10 @@ works for unsigned apps — ignore any guide that still says it does.
 
 > **First launch asks for Local Network access.** Grant it, or SSH to a
 > `192.168.x.x` address fails with `EHOSTUNREACH`. You can change your mind
-> later in System Settings → Privacy & Security → Local Network.
+> later in System Settings → Privacy & Security → Local Network. If the prompt
+> never appears and every LAN connection fails anyway, the permission is stuck
+> on another app's record rather than yours —
+> [`docs/SESSION-STATE.md`](docs/SESSION-STATE.md) has the fix.
 
 ## What you get
 
@@ -166,8 +169,12 @@ UI — password prompts, transfers, tunnels, splits — then prints a pass/fail
 table and leaves a screenshot behind. It never touches your own sessions.
 
 Release builds are ad-hoc signed under `com.agungmohmd.gonds`. That does not
-satisfy Gatekeeper, but it gives the app a stable code identity, which is what
-macOS keys privacy permissions on — so Local Network access survives a rebuild.
+satisfy Gatekeeper, but it gives the app one legible identifier instead of the
+Electron stub's. It does not make privacy permissions stick: Local Network is
+keyed on the Electron binary's Mach-O UUID, not the signature — stable across
+rebuilds, but shared with every app built against the same Electron version, so
+an older one can capture it. [`docs/SESSION-STATE.md`](docs/SESSION-STATE.md)
+has the symptom and the fix.
 With a Developer ID the same command signs and notarises; environment only, no
 config change:
 

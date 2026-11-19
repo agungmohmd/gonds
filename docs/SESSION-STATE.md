@@ -170,10 +170,43 @@ paid Apple Developer account, which this project does not have — there is no
 free substitute, and a self-signed certificate buys nothing over ad-hoc.
 
 What the ad-hoc signature *does* buy is a stable code identity
-(`com.agungmohmd.gonds` rather than the prebuilt stub's generic `Electron`).
-macOS keys TCC permissions on that identity, so Local Network access and
-friends survive a rebuild. `scripts/afterpack.js` applies it, and steps aside
-entirely when `GONDS_SIGN_IDENTITY` is set.
+(`com.agungmohmd.gonds` rather than the prebuilt stub's generic `Electron`), so
+the app has one legible name everywhere macOS reports it — including
+`tccutil`, which takes a bundle id. `scripts/afterpack.js` applies it, and
+steps aside entirely when `GONDS_SIGN_IDENTITY` is set.
+
+Local Network is **not** one of those permissions, and believing it was cost an
+evening. It lives in `/Library/Preferences/com.apple.networkextension.plist`,
+not in TCC, and macOS attributes it to the executable's **Mach-O UUID** — which
+comes from the prebuilt Electron binary, so it is identical in every app built
+against the same Electron version. This project was called `macxterm` before it
+was called Gonds, both builds shipped the same Electron 33 stub, and
+`/Library/Preferences/com.apple.networkextension.uuidcache.plist` went on
+mapping that UUID to `net.macxterm.app` long after the old app was deleted.
+Gonds inherited the dead app's record: every LAN connection failed with
+`EHOSTUNREACH`, no prompt ever appeared, and `tccutil reset All
+com.agungmohmd.gonds` changed nothing, because the permission was never in TCC
+to begin with.
+
+The log is the only place the attribution is visible:
+
+```bash
+log show --last 5m --predicate 'process == "UserEventAgent"' \
+  --style compact | grep LocalNetwork
+```
+
+A healthy run resolves the bundle id *by PID*. A line reading `found bundle id
+<something else> by UUID` means another app owns your LAN permission. Drop the
+UUID cache and let it rebuild:
+
+```bash
+sudo rm /Library/Preferences/com.apple.networkextension.uuidcache.plist
+sudo killall -HUP UserEventAgent
+```
+
+Then quit the app properly — ⌘Q, not just the window — and reopen it; the
+prompt comes back. Do not delete `com.apple.networkextension.plist` itself: it
+holds every app's LAN grant and the system's VPN configurations.
 
 Build config lives in `electron-builder.config.js` rather than `package.json`
 so signing and notarisation follow the environment: set `GONDS_SIGN_IDENTITY`

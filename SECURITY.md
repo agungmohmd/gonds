@@ -81,11 +81,12 @@ modules and a sandboxed renderer can't load them. Context isolation and the CSP
 are still on, so no direct Node or network access — but it's weaker than a real
 sandbox, and I know it.
 
-**Ad-hoc signing.** Doesn't get you past Gatekeeper. It's there so macOS gives
-the app a stable identity and stops forgetting its privacy permissions every
-rebuild. Check what you downloaded with
-`codesign -dv /Applications/Gonds.app` — identifier should be
-`com.agungmohmd.gonds`.
+**Ad-hoc signing.** Doesn't get you past Gatekeeper, and it doesn't make the
+app's privacy permissions stick across rebuilds either — Local Network, for
+one, is keyed on the Electron binary's Mach-O UUID rather than on the
+signature. What it buys is one legible identifier instead of the Electron
+stub's. Check what you downloaded with `codesign -dv /Applications/Gonds.app`
+— identifier should be `com.agungmohmd.gonds`.
 
 ## Go check for yourself
 
