@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; width: 1024px; height: 1024px; background: transparent; }
+
+  /*
+    Apple's macOS icon grid: the artwork sits in an 824x824 rounded square
+    centred in a 1024x1024 canvas, leaving room for the system shadow. The
+    corner radius is ~22.5% of the tile.
+  */
+  .tile {
+    position: absolute; left: 100px; top: 100px; width: 824px; height: 824px;
+    border-radius: 185px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, .30);
+  }
+
+  /*
+    The source art is square with the face centred and generous padding.
+    Scaling past the tile crops the flat gradient corners — which the squircle
+    would cut anyway — and lets the face read at 32px instead of floating in
+    a field of blue.
+  */
+  .tile img {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 118%; height: 118%;
+    transform: translate(-50%, -50%);
+    display: block;
+  }
+</style>
+<div class="tile"><img src="../../assets/logo.png" alt=""></div>

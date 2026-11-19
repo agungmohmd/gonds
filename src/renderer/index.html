@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'none'">
+  <title>Gonds</title>
+  <link rel="stylesheet" href="../../node_modules/@xterm/xterm/css/xterm.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<!-- icon sprite -->
+<svg style="display:none" aria-hidden="true">
+  <defs>
+    <symbol id="i-session" viewBox="0 0 16 16"><path d="M1.5 2.5h13v9h-13z" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M3.5 5.5l2 1.8-2 1.8" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M7 9.4h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M1.5 13.5h13" stroke="currentColor" stroke-width="1.2"/></symbol>
+    <symbol id="i-server" viewBox="0 0 16 16"><rect x="2" y="2.5" width="12" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1.2"/><rect x="2" y="9.5" width="12" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="4.5" cy="4.5" r=".8" fill="currentColor"/><circle cx="4.5" cy="11.5" r=".8" fill="currentColor"/></symbol>
+    <symbol id="i-tools" viewBox="0 0 16 16"><path d="M10.5 2a3.5 3.5 0 0 0-3.1 5.1L2 12.5 3.5 14l5.4-5.4A3.5 3.5 0 1 0 10.5 2z" fill="none" stroke="currentColor" stroke-width="1.2"/></symbol>
+    <symbol id="i-split" viewBox="0 0 16 16"><rect x="1.5" y="2.5" width="13" height="11" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M8 2.5v11" stroke="currentColor" stroke-width="1.2"/></symbol>
+    <symbol id="i-broadcast" viewBox="0 0 16 16"><path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="13.5" cy="4" r="1.6" fill="currentColor"/><circle cx="13.5" cy="8" r="1.6" fill="currentColor"/><circle cx="13.5" cy="12" r="1.6" fill="currentColor"/></symbol>
+    <symbol id="i-tunnel" viewBox="0 0 16 16"><path d="M1.5 11a6.5 6.5 0 0 1 13 0" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 11h13" stroke="currentColor" stroke-width="1.2"/><path d="M5 11V8.5h6V11" fill="none" stroke="currentColor" stroke-width="1.2"/></symbol>
+    <symbol id="i-package" viewBox="0 0 16 16"><path d="M8 1.5l6 3v7l-6 3-6-3v-7z" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M2 4.5l6 3 6-3M8 7.5v7" fill="none" stroke="currentColor" stroke-width="1.2"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.2" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M12.6 3.4l-1.4 1.4M4.8 11.2l-1.4 1.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-help" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M6.2 6.1a1.9 1.9 0 1 1 2.6 1.8c-.5.2-.8.6-.8 1.1v.4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="11.6" r=".85" fill="currentColor"/></symbol>
+    <symbol id="i-ssh" viewBox="0 0 16 16"><rect x="1.5" y="2.5" width="13" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M4 6.2l2.1 1.9L4 10" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.2 10.2h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
+    <symbol id="i-shell" viewBox="0 0 16 16"><path d="M2.5 4.2l3.2 3.8-3.2 3.8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><rect x="8.2" y="10.2" width="5.3" height="2.4" rx=".5" fill="currentColor"/></symbol>
+    <symbol id="i-sftp" viewBox="0 0 16 16"><path d="M1.5 4.2A1.2 1.2 0 0 1 2.7 3h3.1l1.3 1.6h5.2A1.2 1.2 0 0 1 13.5 6v6.3a1.2 1.2 0 0 1-1.2 1.2H2.7a1.2 1.2 0 0 1-1.2-1.2z" fill="currentColor" opacity=".45"/><path d="M6 10.5l2-2 2 2M8 8.5v4" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-telnet" viewBox="0 0 16 16"><rect x="1.5" y="2.5" width="13" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M4.2 6h7.6M4.2 8.4h5M4.2 10.8h6.3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-mosh" viewBox="0 0 16 16"><rect x="1.5" y="5" width="9" height="8.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M3.6 8.3l1.6 1.4-1.6 1.4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.3 5.2a4.4 4.4 0 0 1 3.2 3.2M11.6 2.2a7.3 7.3 0 0 1 5.3 5.3" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-serial" viewBox="0 0 16 16"><rect x="2" y="5.5" width="12" height="6" rx="3" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="5" cy="8.5" r="1" fill="currentColor"/><circle cx="8" cy="8.5" r="1" fill="currentColor"/><circle cx="11" cy="8.5" r="1" fill="currentColor"/></symbol>
+    <symbol id="i-rdp" viewBox="0 0 16 16"><rect x="1.5" y="3" width="13" height="8.5" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M5.5 13.5h5M8 11.5v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M4.2 5.6h7.6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity=".6"/></symbol>
+    <symbol id="i-vnc" viewBox="0 0 16 16"><rect x="1.5" y="2.5" width="13" height="9.5" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M6.2 5.4l4.4 2.6-1.9.5-.6 1.9z" fill="currentColor"/><path d="M5.5 14h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-x11" viewBox="0 0 16 16"><rect x="1.5" y="2.5" width="13" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 5.6h13" stroke="currentColor" stroke-width="1.2"/><path d="M5.8 8l4.4 3.4M10.2 8l-4.4 3.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
+    <symbol id="i-browser" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M1.9 6.2h12.2M1.9 9.8h12.2" stroke="currentColor" stroke-width="1.1"/><ellipse cx="8" cy="8" rx="2.9" ry="6.3" fill="none" stroke="currentColor" stroke-width="1.1"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 16 16"><path d="M1.5 4.2A1.2 1.2 0 0 1 2.7 3h3.1l1.3 1.6h5.2A1.2 1.2 0 0 1 13.5 6v6.3a1.2 1.2 0 0 1-1.2 1.2H2.7a1.2 1.2 0 0 1-1.2-1.2z" fill="currentColor" opacity=".85"/></symbol>
+    <symbol id="i-folder-open" viewBox="0 0 16 16"><path d="M1.5 4.2A1.2 1.2 0 0 1 2.7 3h3.1l1.3 1.6h5.2A1.2 1.2 0 0 1 13.5 6H4.6L1.5 12.3z" fill="currentColor" opacity=".85"/><path d="M4.6 6h10.1l-2.5 7.5H2.1z" fill="currentColor" opacity=".55"/></symbol>
+    <symbol id="i-file" viewBox="0 0 16 16"><path d="M3.5 1.5h6l3.5 3.5v9.5h-9.5z" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M9.5 1.5V5H13" fill="none" stroke="currentColor" stroke-width="1.2"/></symbol>
+    <symbol id="i-up" viewBox="0 0 16 16"><path d="M8 12V4M4.5 7.5L8 4l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 16 16"><path d="M13.2 7a5.2 5.2 0 1 0-1.3 4.2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M13.6 3.4V7h-3.4" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-download" viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5L8 10l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.5 13h11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 16 16"><path d="M8 10V2M4.5 5.5L8 2l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.5 13h11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 16 16"><path d="M3 4.5h10M6 4.5V3h4v1.5M4.3 4.5l.7 9h6l.7-9" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 16 16"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-close" viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></symbol>
+    <symbol id="i-search" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M10.4 10.4L14 14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
+    <symbol id="i-macro" viewBox="0 0 16 16"><path d="M3.5 2.5l9 5.5-9 5.5z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-key" viewBox="0 0 16 16"><circle cx="5" cy="5" r="3" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M7.2 7.2L13 13M10.5 10.5l-1.3 1.3M12 12l-1.3 1.3" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 16 16"><path d="M9.5 1.5l5 5-2 .5-3.2 3.2.3 2.4-1.1 1.1-5.2-5.2 1.1-1.1 2.4.3L10 4.5z" fill="currentColor"/><path d="M4.3 11.7L1.5 14.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-sidebar" viewBox="0 0 16 16"><rect x="1.5" y="2.5" width="13" height="11" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M5.5 2.5v11" stroke="currentColor" stroke-width="1.2"/></symbol>
+  </defs>
+</svg>
+
+<div id="titlebar">
+  <div id="titlebar-drag"></div>
+  <span id="title-text">Gonds</span>
+</div>
+
+<div id="ribbon">
+  <div class="rib-group">
+    <button class="rib" data-action="toggle-sidebar" title="Sidebar (⌥⌘B)"><svg><use href="#i-sidebar"/></svg></button>
+  </div>
+  <div class="rib-sep"></div>
+  <div class="rib-group">
+    <button class="rib primary" data-action="quick-connect" title="Connect to a host (⌘K)"><svg><use href="#i-server"/></svg></button>
+    <button class="rib" data-action="new-shell" title="New local shell (⌘T)"><svg><use href="#i-shell"/></svg></button>
+    <button class="rib" data-action="new-session" title="New saved session (⇧⌘N)"><svg><use href="#i-plus"/></svg></button>
+  </div>
+  <div class="rib-sep"></div>
+  <div class="rib-group">
+    <button class="rib" data-action="split-right" title="Split right (⌘D)"><svg><use href="#i-split"/></svg></button>
+    <button class="rib" data-action="toggle-sftp" title="SFTP panel (⌘B)"><svg><use href="#i-folder-open"/></svg></button>
+  </div>
+  <div class="rib-sep"></div>
+  <div class="rib-group">
+    <button class="rib" data-action="broadcast" title="Broadcast typing to every terminal (⇧⌘M)"><svg><use href="#i-broadcast"/></svg></button>
+    <button class="rib" data-action="macros" title="Macros"><svg><use href="#i-macro"/></svg></button>
+    <button class="rib" data-action="tunnels" title="Port forwarding"><svg><use href="#i-tunnel"/></svg></button>
+    <button class="rib" data-action="tools-menu" title="Network &amp; system tools"><svg><use href="#i-tools"/></svg></button>
+  </div>
+  <div class="rib-spacer"></div>
+  <div class="rib-group">
+    <button class="rib" data-action="settings" title="Settings (⌘,)"><svg><use href="#i-settings"/></svg></button>
+  </div>
+</div>
+
+<div id="main">
+  <aside id="sidebar">
+    <div id="sidebar-head">
+      <div class="sb-search">
+        <svg class="ic"><use href="#i-search"/></svg>
+        <input id="session-filter" type="text" placeholder="Filter sessions…" spellcheck="false">
+      </div>
+      <div class="sb-actions">
+        <button class="mini" data-action="new-session" title="New session"><svg><use href="#i-plus"/></svg></button>
+        <button class="mini" data-action="new-folder" title="New folder"><svg><use href="#i-folder"/></svg></button>
+        <button class="mini" data-action="import-sessions" title="Import sessions"><svg><use href="#i-download"/></svg></button>
+      </div>
+    </div>
+    <div id="sidebar-body">
+      <div class="sb-pane" data-pane="sessions"><div id="session-tree" class="tree" tabindex="0"></div></div>
+      <div class="sb-pane" data-pane="tools" hidden><div id="tools-pane"></div></div>
+      <div class="sb-pane" data-pane="macros" hidden><div id="macros-pane"></div></div>
+      <div class="sb-pane" data-pane="tunnels" hidden><div id="tunnels-pane"></div></div>
+    </div>
+    <div id="sidebar-tabs">
+      <button class="sb-tab active" data-pane="sessions">Sessions</button>
+      <button class="sb-tab" data-pane="tools">Tools</button>
+      <button class="sb-tab" data-pane="macros">Macros</button>
+      <button class="sb-tab" data-pane="tunnels">Tunnels</button>
+    </div>
+    <div id="sidebar-resize" class="vresize"></div>
+  </aside>
+
+  <section id="work">
+    <div id="tabbar">
+      <div id="tabs"></div>
+      <button id="tab-add" class="tab-add" title="New tab"><svg><use href="#i-plus"/></svg></button>
+    </div>
+    <div id="panes"></div>
+  </section>
+</div>
+
+<div id="statusbar">
+  <span id="status-session">No session</span>
+  <span class="sb-dot"></span>
+  <span id="status-conn">—</span>
+  <span class="sb-grow"></span>
+  <span id="status-broadcast" hidden class="warn">Broadcast ON</span>
+  <span id="status-transfers"></span>
+  <span id="status-size">—</span>
+  <span id="status-scheme">—</span>
+</div>
+
+<div id="modal-root"></div>
+<div id="toasts"></div>
+
+<script src="../../node_modules/@xterm/xterm/lib/xterm.js"></script>
+<script src="../../node_modules/@xterm/addon-fit/lib/addon-fit.js"></script>
+<script src="../../node_modules/@xterm/addon-search/lib/addon-search.js"></script>
+<script src="../../node_modules/@xterm/addon-web-links/lib/addon-web-links.js"></script>
+<script src="../../node_modules/@xterm/addon-unicode11/lib/addon-unicode11.js"></script>
+<script src="js/util.js"></script>
+<script src="js/dialogs.js"></script>
+<script src="js/terminal.js"></script>
+<script src="js/sftp.js"></script>
+<script src="js/tabs.js"></script>
+<script src="js/sidebar.js"></script>
+<script src="js/toolsui.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

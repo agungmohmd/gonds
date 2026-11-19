@@ -1,0 +1,36 @@
+{
+  "name": "gonds",
+  "productName": "Gonds",
+  "version": "1.0.0",
+  "description": "All-in-one terminal, SSH client and SFTP browser for macOS",
+  "main": "src/main/main.js",
+  "author": "agung",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "test": "node test/selfcheck.js",
+    "smoke": "node scripts/smoke.js",
+    "postinstall": "electron-builder install-app-deps",
+    "dist": "electron-builder --mac --config electron-builder.config.js",
+    "smoke:remote": "node scripts/smoke-remote.js",
+    "demo": "node scripts/record.js"
+  },
+  "dependencies": {
+    "@xterm/addon-fit": "^0.10.0",
+    "@xterm/addon-search": "^0.15.0",
+    "@xterm/addon-unicode11": "^0.8.0",
+    "@xterm/addon-web-links": "^0.11.0",
+    "@xterm/xterm": "^5.5.0",
+    "node-pty": "^1.0.0",
+    "ssh2": "^1.15.0"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/agungmohmd/gonds.git"
+  },
+  "homepage": "https://github.com/agungmohmd/gonds"
+}
